@@ -1,0 +1,1480 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>Lokantax — Lezzetin sosyal rehberi</title>
+<meta name="description" content="Lokantax ile restoran keşfet, arkadaşlarınla buluşmaları planla, AI menü çevirisi kullan ve lezzet yolculuğunu tek uygulamada yönet." />
+<meta property="og:title" content="Lokantax — Lezzetin sosyal rehberi" />
+<meta property="og:description" content="Restoran keşfi, grup buluşmaları, seyahat planlama ve AI menü asistanı tek yerde." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://lokantax.com/assets/og-image-2026.png" />
+<meta property="og:image:width" content="1536" />
+<meta property="og:image:height" content="1024" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:url" content="https://lokantax.com" />
+<meta property="og:site_name" content="Lokantax" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Lokantax — Lezzetin sosyal rehberi" />
+<meta name="twitter:description" content="Restoran keşfi, grup buluşmaları, seyahat planlama ve AI menü asistanı tek yerde." />
+<meta name="twitter:image" content="https://lokantax.com/assets/og-image-2026.png" />
+<meta name="theme-color" content="#F5C518" />
+<link rel="icon" type="image/png" href="assets/og-image-2026.png" />
+<link rel="apple-touch-icon" href="assets/og-image-2026.png" />
+<link rel="shortcut icon" type="image/png" href="assets/og-image-2026.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20260418-29"/>
+<style>
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== 3D / Cinematic ===== */
+  @keyframes float3d {
+    0%, 100% { transform: translate3d(0,0,0) rotateX(0) rotateY(0); }
+    50%      { transform: translate3d(0,-14px,30px) rotateX(2deg) rotateY(-3deg); }
+  }
+  @keyframes spinSlow { from { transform: rotateY(0); } to { transform: rotateY(360deg); } }
+  @keyframes shimmer  { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  @keyframes glowPulse{ 0%,100% { box-shadow: 0 0 0 0 rgba(245,197,24,0); } 50% { box-shadow: 0 0 80px 0 rgba(245,197,24,0.35); } }
+
+  /* Reveal (entrance) — applied via IntersectionObserver toggling .in */
+  .reveal { opacity: 0; will-change: transform, opacity; transition:
+      opacity 900ms cubic-bezier(.2,.8,.2,1),
+      transform 1100ms cubic-bezier(.2,.8,.2,1),
+      filter 900ms cubic-bezier(.2,.8,.2,1);
+    filter: blur(6px);
+  }
+  .reveal.in { opacity: 1; filter: blur(0); transform: none !important; }
+
+  .reveal-up    { transform: translate3d(0, 60px, 0); }
+  .reveal-fade  { transform: translate3d(0, 20px, 0); filter: blur(10px); }
+  .reveal-tiltL { transform: perspective(1200px) rotateY(28deg) rotateX(-6deg) translate3d(-40px,40px,-120px); transform-origin: left center; }
+  .reveal-tiltR { transform: perspective(1200px) rotateY(-28deg) rotateX(-6deg) translate3d(40px,40px,-120px); transform-origin: right center; }
+  .reveal-zoom  { transform: perspective(1200px) translate3d(0,40px,-200px) scale(.9); }
+  .reveal-flip  { transform: perspective(1400px) rotateX(-55deg) translateY(60px); transform-origin: 50% 100%; }
+  .reveal-rise  { transform: perspective(1200px) translate3d(0,80px,-160px) rotateX(8deg); }
+
+  /* Stagger for grouped children */
+  .reveal-stagger > * { opacity: 0; transform: translate3d(0,40px,0); transition: opacity .8s ease, transform .9s cubic-bezier(.2,.8,.2,1); }
+  .reveal-stagger.in > * { opacity: 1; transform: none; }
+  .reveal-stagger.in > *:nth-child(1){ transition-delay: .05s; }
+  .reveal-stagger.in > *:nth-child(2){ transition-delay: .12s; }
+  .reveal-stagger.in > *:nth-child(3){ transition-delay: .19s; }
+  .reveal-stagger.in > *:nth-child(4){ transition-delay: .26s; }
+  .reveal-stagger.in > *:nth-child(5){ transition-delay: .33s; }
+  .reveal-stagger.in > *:nth-child(6){ transition-delay: .40s; }
+  .reveal-stagger.in > *:nth-child(7){ transition-delay: .47s; }
+
+  /* 3D scene helpers */
+  .scene-3d { perspective: 1400px; perspective-origin: 50% 30%; }
+  .tilt-3d  { transform-style: preserve-3d; transition: transform .35s cubic-bezier(.2,.8,.2,1); will-change: transform; }
+  .tilt-3d > * { transform: translateZ(0); }
+  .tilt-3d .lift-1 { transform: translateZ(30px); }
+  .tilt-3d .lift-2 { transform: translateZ(60px); }
+  .tilt-3d .lift-3 { transform: translateZ(90px); }
+
+  /* Hero phone parallax targets get a subtle perpetual float when at rest */
+  .phone-float { transform-style: preserve-3d; }
+  .phone-float .phone { transform-style: preserve-3d; }
+  .hero-visual.scene-3d .phone-float.p1 .phone { animation: float3d 9s ease-in-out infinite; }
+  .hero-visual.scene-3d .phone-float.p2 .phone { animation: float3d 11s ease-in-out -2s infinite; }
+
+  /* AI demo cinematic */
+  .ai-demo { transform-style: preserve-3d; }
+  .ai-demo.tilt-3d { transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+  .ai-photo { position: relative; overflow: hidden; }
+  .ai-photo::before {
+    content: ""; position: absolute; inset: -2px;
+    background: linear-gradient(110deg, transparent 30%, rgba(91,79,224,.35) 50%, transparent 70%);
+    background-size: 200% 100%;
+    animation: shimmer 3.6s linear infinite;
+    pointer-events: none; mix-blend-mode: screen;
+  }
+
+  /* Marquee depth */
+  .marquee { perspective: 800px; }
+  .marquee-track { transform: rotateX(8deg); transform-origin: 50% 100%; }
+
+  /* Levels XP card cinematic */
+  .xp-rank-badge { transform-style: preserve-3d; animation: spinSlow 14s linear infinite; }
+  .xp-card { transform-style: preserve-3d; }
+
+  /* Download CTA glow */
+  .d-ctas .store-btn { animation: glowPulse 4s ease-in-out infinite; }
+  .d-ctas .store-btn:nth-child(2) { animation-delay: 1.5s; }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-stagger > * { transition: none; opacity: 1; transform: none; filter: none; }
+    .hero-visual.scene-3d .phone-float .phone,
+    .xp-rank-badge,
+    .d-ctas .store-btn,
+    .ai-photo::before { animation: none !important; }
+  }
+
+  /* ===================== ADVANCED CINEMATIC ===================== */
+
+  /* Scroll progress beam at very top */
+  .scroll-beam {
+    position: fixed; top: 0; left: 0; right: 0; height: 2px;
+    z-index: 9999; pointer-events: none;
+    background: linear-gradient(90deg, var(--amber), var(--coral), var(--violet));
+    transform-origin: 0 50%;
+    transform: scaleX(var(--p, 0));
+    transition: transform .12s linear;
+    box-shadow: 0 0 12px rgba(245,197,24,.55);
+  }
+
+  /* Cursor spotlight overlay (desktop only). Mouse coords -> --mx/--my % */
+  body { --mx: 50%; --my: 30%; }
+  .cursor-spot {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    background: radial-gradient(420px circle at var(--mx) var(--my),
+                rgba(245,197,24,0.10), transparent 60%);
+    mix-blend-mode: plus-lighter;
+    transition: opacity .4s ease;
+  }
+  @media (hover: none) { .cursor-spot { display: none; } }
+
+  /* Magnetic CTA buttons */
+  .magnetic { display: inline-flex; transition: transform .25s cubic-bezier(.2,.8,.2,1); will-change: transform; }
+
+  /* Floating ambient blobs (parallax) */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: .55;
+    pointer-events: none;
+    will-change: transform;
+    z-index: 0;
+  }
+  .blob.amber { background: radial-gradient(circle at 30% 30%, #ffd84d, transparent 65%); }
+  .blob.coral { background: radial-gradient(circle at 30% 30%, #ff8d72, transparent 65%); }
+  .blob.violet{ background: radial-gradient(circle at 30% 30%, #8b80ff, transparent 65%); }
+  .blob.sky   { background: radial-gradient(circle at 30% 30%, #79a8ff, transparent 65%); }
+  @keyframes blobDrift {
+    0%   { transform: translate3d(0,0,0) scale(1); }
+    50%  { transform: translate3d(40px,-30px,0) scale(1.12); }
+    100% { transform: translate3d(0,0,0) scale(1); }
+  }
+  .blob { animation: blobDrift 18s ease-in-out infinite; }
+  .blob.b2 { animation-duration: 22s; animation-delay: -6s; }
+  .blob.b3 { animation-duration: 26s; animation-delay: -12s; }
+
+  /* Hero & sections become positioning contexts for blobs */
+  .hero, .ai-menu, .travel, .levels, .download { position: relative; isolation: isolate; }
+  .hero > .wrap, .ai-menu > .wrap, .travel > .wrap,
+  .levels > .wrap, .download > .wrap { position: relative; z-index: 2; }
+
+  /* 3D text — split spans with depth via .word */
+  .text-3d { display: inline-block; perspective: 900px; }
+  .text-3d .word {
+    display: inline-block;
+    transform-origin: 50% 100%;
+    transition: transform .9s cubic-bezier(.2,.8,.2,1), color .4s, text-shadow .4s;
+    will-change: transform;
+  }
+  .text-3d:hover .word {
+    transform: translateZ(40px) rotateX(-12deg);
+    text-shadow: 0 12px 30px rgba(14,18,32,.25);
+  }
+
+  /* Scroll-driven scene zoom for hero */
+  .hero .hero-visual { transform-origin: 50% 50%; will-change: transform; }
+
+  /* Section divider beam */
+  .beam-divider {
+    position: relative; height: 1px; overflow: visible;
+    background: linear-gradient(90deg, transparent, var(--line) 30%, var(--line) 70%, transparent);
+  }
+  .beam-divider::after {
+    content: ""; position: absolute; top: -1px; left: -20%;
+    width: 30%; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+    box-shadow: 0 0 16px var(--amber);
+    animation: beam 6s linear infinite;
+  }
+  @keyframes beam { 0% { left: -30%; } 100% { left: 110%; } }
+
+  /* Number "odometer-like" big-stat shine */
+  .stat .num { background: linear-gradient(180deg, var(--ink), var(--ink-soft)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  /* Phone screen depth — content lifts off slightly on scene tilt */
+  .scene-3d .phone-screen img { transform: translateZ(20px); }
+
+  /* Marquee gain depth fog at edges */
+  .marquee { position: relative; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blob, .beam-divider::after, .cursor-spot { animation: none !important; }
+    .scroll-beam { display: none; }
+  }
+
+  /* ===================== PRO TOUCHES ===================== */
+
+  /* 1. Film grain overlay — adds cinematic texture without being distracting */
+  .grain {
+    position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+    opacity: .06; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 240px 240px;
+    animation: grainShift 1.2s steps(6) infinite;
+  }
+  @keyframes grainShift {
+    0%   { transform: translate(0,0); }
+    20%  { transform: translate(-8px,4px); }
+    40%  { transform: translate(6px,-6px); }
+    60%  { transform: translate(-4px,-8px); }
+    80%  { transform: translate(8px,6px); }
+    100% { transform: translate(0,0); }
+  }
+
+  /* 2. Animated mesh-gradient (Stripe/Linear style) — radial blobs softly drifting */
+  .mesh-bg {
+    position: absolute; inset: -10%; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(at 18% 22%, rgba(245,197,24,.55), transparent 50%),
+      radial-gradient(at 78% 18%, rgba(255,106,77,.45), transparent 55%),
+      radial-gradient(at 32% 82%, rgba(91,79,224,.30), transparent 55%),
+      radial-gradient(at 88% 78%, rgba(59,125,255,.30), transparent 55%);
+    filter: blur(40px) saturate(120%);
+    animation: meshDrift 22s ease-in-out infinite alternate;
+    opacity: .65;
+  }
+  @keyframes meshDrift {
+    0%   { transform: translate3d(0,0,0) scale(1); }
+    50%  { transform: translate3d(-3%,2%,0) scale(1.08); }
+    100% { transform: translate3d(2%,-3%,0) scale(1.04); }
+  }
+
+  /* 3. Counter — monospace tabular feel, gradient sheen */
+  .counter {
+    font-variant-numeric: tabular-nums;
+  }
+  .counter-shine {
+    background: linear-gradient(120deg, var(--ink) 0%, var(--amber-deep) 40%, var(--ink) 70%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: sheen 6s linear infinite;
+  }
+  @keyframes sheen { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* 4. Split-text headline — characters rise & blur in */
+  .split-text { display: inline-block; }
+  .split-text .char {
+    display: inline-block;
+    opacity: 0; transform: translateY(.4em) rotateX(-30deg);
+    filter: blur(8px);
+    transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1), filter .8s;
+    transform-origin: 50% 100%;
+    will-change: transform, opacity, filter;
+  }
+  .split-text .char.space { width: .28em; }
+  .split-text.in .char { opacity: 1; transform: translateY(0) rotateX(0); filter: blur(0); }
+
+  /* 5. Soft conic-gradient ring around xp badge */
+  .xp-rank-badge {
+    position: relative;
+  }
+  .xp-rank-badge::before {
+    content: ""; position: absolute; inset: -6px; border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--sky), var(--violet), var(--coral), var(--amber), var(--sky));
+    -webkit-mask: radial-gradient(circle, transparent 60%, #000 62%);
+            mask: radial-gradient(circle, transparent 60%, #000 62%);
+    animation: spinSlow 6s linear infinite;
+  }
+
+  /* 6. Subtle gradient kicker underline — premium accent */
+  .kicker {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 6px;
+  }
+  .kicker::after {
+    content: ""; position: absolute; left: 0; bottom: 0;
+    width: 28px; height: 2px;
+    background: linear-gradient(90deg, var(--amber), var(--coral));
+    border-radius: 2px;
+  }
+
+  /* 7. Card hover lift — adds depth on hover for feature cards */
+  .f-card {
+    transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s;
+    will-change: transform;
+  }
+  .f-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px -20px rgba(14,18,32,.18);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grain, .mesh-bg, .counter-shine { animation: none !important; }
+    .split-text .char { opacity: 1; transform: none; filter: none; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<noscript>Lokantax sitesini görüntülemek için JavaScript etkin olmalıdır.</noscript>
+
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+/* ===================== HOOKS & 3D HELPERS ===================== */
+function useReveal(options = {}) {
+  const ref = React.useRef(null);
+  const [shown, setShown] = React.useState(false);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === 'undefined') { setShown(true); return; }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { setShown(true); obs.disconnect(); }
+      });
+    }, { threshold: options.threshold ?? 0, rootMargin: options.rootMargin ?? '0px 0px -10% 0px' });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, shown];
+}
+
+function Reveal({ as: Tag = 'div', variant = 'up', stagger = false, className = '', children, ...rest }) {
+  const [ref, shown] = useReveal();
+  const variantCls = `reveal-${variant}`;
+  const cls = [
+    'reveal',
+    variantCls,
+    stagger ? 'reveal-stagger' : '',
+    shown ? 'in' : '',
+    className
+  ].filter(Boolean).join(' ');
+  return <Tag ref={ref} className={cls} {...rest}>{children}</Tag>;
+}
+
+function Tilt({ as: Tag = 'div', max = 10, scale = 1.02, className = '', style = {}, children, ...rest }) {
+  const ref = React.useRef(null);
+  const raf = React.useRef(0);
+  const onMove = (e) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    const rx = (-py * max).toFixed(2);
+    const ry = (px * max).toFixed(2);
+    cancelAnimationFrame(raf.current);
+    raf.current = requestAnimationFrame(() => {
+      el.style.transform = `perspective(1100px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${scale})`;
+    });
+  };
+  const onLeave = () => {
+    const el = ref.current; if (!el) return;
+    cancelAnimationFrame(raf.current);
+    el.style.transform = 'perspective(1100px) rotateX(0) rotateY(0) scale(1)';
+  };
+  return (
+    <Tag
+      ref={ref}
+      className={`tilt-3d ${className}`}
+      style={style}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      {...rest}
+    >
+      {children}
+    </Tag>
+  );
+}
+
+/* Mouse-driven parallax for any container with [data-parallax]; children get
+   transform based on data-depth (positive = closer / moves more). */
+function useMouseParallax(ref, { strength = 14 } = {}) {
+  React.useEffect(() => {
+    const el = ref.current; if (!el) return;
+    let raf = 0;
+    const handle = (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.querySelectorAll('[data-depth]').forEach(child => {
+          const d = parseFloat(child.dataset.depth || '1');
+          const tx = (-px * strength * d).toFixed(2);
+          const ty = (-py * strength * d).toFixed(2);
+          const ry = (px * 6 * d).toFixed(2);
+          const rx = (-py * 6 * d).toFixed(2);
+          child.style.transform = `translate3d(${tx}px,${ty}px,0) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        });
+      });
+    };
+    const reset = () => {
+      el.querySelectorAll('[data-depth]').forEach(c => { c.style.transform = ''; });
+    };
+    el.addEventListener('mousemove', handle);
+    el.addEventListener('mouseleave', reset);
+    return () => {
+      el.removeEventListener('mousemove', handle);
+      el.removeEventListener('mouseleave', reset);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+}
+
+/* Global cinematic FX: scroll progress beam, cursor spotlight, scroll-bound
+   transforms for [data-scroll-*] elements, and ambient blob parallax. */
+function useGlobalCinematics() {
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    let raf = 0;
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    const onMouse = (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      document.body.style.setProperty('--mx', (mouseX / window.innerWidth * 100) + '%');
+      document.body.style.setProperty('--my', (mouseY / window.innerHeight * 100) + '%');
+    };
+
+    const tick = () => {
+      // Scroll progress
+      const sc = window.scrollY;
+      const max = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+      const p = Math.min(1, Math.max(0, sc / max));
+      document.documentElement.style.setProperty('--p', p);
+
+      // Hero zoom-out as you scroll
+      const hero = document.querySelector('.hero .hero-visual');
+      if (hero) {
+        const heroRect = hero.getBoundingClientRect();
+        const heroProg = Math.min(1, Math.max(0, -heroRect.top / Math.max(1, heroRect.height)));
+        hero.style.transform = `scale(${1 - heroProg * 0.12}) translateY(${heroProg * -40}px)`;
+        hero.style.opacity = String(1 - heroProg * 0.4);
+      }
+
+      // Blob parallax
+      document.querySelectorAll('.blob').forEach(b => {
+        const speed = parseFloat(b.dataset.speed || '0.15');
+        const r = b.getBoundingClientRect();
+        const cy = r.top + r.height / 2;
+        const off = (cy - window.innerHeight / 2) * -speed;
+        b.style.translate = `0 ${off.toFixed(1)}px`;
+      });
+
+      // Generic scroll-driven 3D for [data-scroll-tilt]
+      document.querySelectorAll('[data-scroll-tilt]').forEach(el => {
+        const r = el.getBoundingClientRect();
+        const center = r.top + r.height / 2;
+        const dist = (center - window.innerHeight / 2) / window.innerHeight; // -1..1
+        const rx = Math.max(-12, Math.min(12, -dist * 14));
+        el.style.transform = `perspective(1200px) rotateX(${rx.toFixed(2)}deg)`;
+      });
+
+      raf = 0;
+    };
+
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('mousemove', onMouse, { passive: true });
+    tick();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('mousemove', onMouse);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+}
+
+/* Magnetic hover wrapper — pulls children toward the cursor */
+function Magnetic({ as: Tag = 'span', strength = 0.35, children, className = '', ...rest }) {
+  const ref = React.useRef(null);
+  const onMove = (e) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - (r.left + r.width / 2)) * strength;
+    const y = (e.clientY - (r.top + r.height / 2)) * strength;
+    el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+  };
+  const onLeave = () => { if (ref.current) ref.current.style.transform = 'translate3d(0,0,0)'; };
+  return (
+    <Tag ref={ref} className={`magnetic ${className}`} onMouseMove={onMove} onMouseLeave={onLeave} {...rest}>
+      {children}
+    </Tag>
+  );
+}
+
+/* Split a string into <span class="word"> chunks for 3D text effects */
+function Text3D({ children, className = '', ...rest }) {
+  const text = String(children);
+  return (
+    <span className={`text-3d ${className}`} {...rest}>
+      {text.split(' ').map((w, i, a) => (
+        <React.Fragment key={i}>
+          <span className="word" style={{ transitionDelay: (i * 30) + 'ms' }}>{w}</span>
+          {i < a.length - 1 ? ' ' : ''}
+        </React.Fragment>
+      ))}
+    </span>
+  );
+}
+
+/* Animated counter — counts from 0 to `to` once it enters the viewport */
+function Counter({ to = 100, duration = 1600, prefix = '', suffix = '', decimals = 0, className = '' }) {
+  const ref = React.useRef(null);
+  const [val, setVal] = React.useState(0);
+  React.useEffect(() => {
+    const el = ref.current; if (!el) return;
+    if (typeof IntersectionObserver === 'undefined') { setVal(to); return; }
+    let raf = 0; let start = 0;
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const step = (ts) => {
+      if (!start) start = ts;
+      const p = Math.min(1, (ts - start) / duration);
+      setVal(to * ease(p));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { raf = requestAnimationFrame(step); obs.disconnect(); }
+      });
+    }, { threshold: 0.4 });
+    obs.observe(el);
+    return () => { cancelAnimationFrame(raf); obs.disconnect(); };
+  }, [to, duration]);
+  const formatted = decimals > 0 ? val.toFixed(decimals) : Math.round(val).toLocaleString('tr-TR');
+  return <span ref={ref} className={`counter ${className}`}>{prefix}{formatted}{suffix}</span>;
+}
+
+/* SplitText — characters animate in once visible */
+function SplitText({ children, className = '', as: Tag = 'span', delay = 0 }) {
+  const ref = React.useRef(null);
+  const [shown, setShown] = React.useState(false);
+  React.useEffect(() => {
+    const el = ref.current; if (!el) return;
+    if (typeof IntersectionObserver === 'undefined') { setShown(true); return; }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { setShown(true); obs.disconnect(); }
+      });
+    }, { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  const text = String(children);
+  return (
+    <Tag ref={ref} className={`split-text ${shown ? 'in' : ''} ${className}`} aria-label={text}>
+      {text.split('').map((c, i) => (
+        <span key={i} className={`char ${c === ' ' ? 'space' : ''}`} aria-hidden="true" style={{ transitionDelay: (delay + i * 25) + 'ms' }}>{c === ' ' ? '\u00A0' : c}</span>
+      ))}
+    </Tag>
+  );
+}
+
+/* ===================== ICONS & ATOMS ===================== */
+const Icon = {
+  arrow: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 12h14M13 5l7 7-7 7"/></svg>),
+  star: (p) => (<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" {...p}><path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18 22l-6-3.6L6 22l1.5-7.3L2 10l7.1-1.1z"/></svg>),
+  users: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>),
+  plane: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>),
+  sparkle: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 2l2 7 7 2-7 2-2 7-2-7-7-2 7-2zM19 16l.7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7zM5 4l.5 1.5L7 6l-1.5.5L5 8l-.5-1.5L3 6l1.5-.5z"/></svg>),
+  clock: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>),
+  volume: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M11 5L6 9H2v6h4l5 4zM15.5 8.5a5 5 0 010 7M19 5a9 9 0 010 14"/></svg>),
+  flame: (p) => (<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" {...p}><path d="M12 2s-4 5-4 9a4 4 0 008 0c0-2-1-3-1-5 0 0 3 2 3 6a6 6 0 01-12 0c0-5 6-10 6-10z"/></svg>),
+  compass: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="10"/><polygon points="16.2 7.8 14.1 14.1 7.8 16.2 9.9 9.9" fill="currentColor"/></svg>),
+  book: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zM4 19.5v.5A2.5 2.5 0 006.5 22H20"/></svg>),
+  check: (p) => (<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M20 6L9 17l-5-5"/></svg>),
+  lock: (p) => (<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>),
+  gift: (p) => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3" y="8" width="18" height="4"/><path d="M12 22V8M5 12v10h14V12M7.5 8a2.5 2.5 0 010-5c3.5 0 4.5 5 4.5 5s1-5 4.5-5a2.5 2.5 0 010 5"/></svg>),
+  shield: (p) => (<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>),
+};
+
+function Phone({ src, alt, rotate = 0, size = 'md', style = {} }) {
+  const isSmall = size === 'sm';
+  return (
+    <div className={`phone ${isSmall ? 'sm' : ''}`} style={{ transform: `rotate(${rotate}deg)`, ...style }}>
+      <div className="phone-notch"/>
+      <div className="phone-screen">
+        <img src={src} alt={alt || 'Lokantax uygulama ekranı'}/>
+      </div>
+    </div>
+  );
+}
+
+const STORE_URLS = {
+  apple: '#download',
+  google: 'https://play.google.com/store/apps/details?id=com.ysfhn.NyesemApp'
+};
+
+function StoreBtn({ store = 'apple', href, lang = 'tr' }) {
+  const isApple = store === 'apple';
+  const url = href || STORE_URLS[store];
+  const isExternal = /^https?:\/\//.test(url);
+  const small = isApple
+    ? (lang === 'tr' ? "App Store'dan" : 'Download on the')
+    : (lang === 'tr' ? "Google Play'den" : 'GET IT ON');
+  const big = isApple ? 'App Store' : 'Google Play';
+  return (
+    <a
+      className="store-btn"
+      href={url}
+      aria-label={isApple ? (lang === 'tr' ? "App Store'dan indir" : 'Download on the App Store') : (lang === 'tr' ? "Google Play'den indir" : 'Get it on Google Play')}
+      {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
+      {isApple ? (
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.543 12.594c-.027-2.715 2.214-4.018 2.314-4.082-1.262-1.847-3.226-2.1-3.927-2.13-1.673-.169-3.262.984-4.111.984-.846 0-2.155-.96-3.541-.934-1.821.027-3.501 1.057-4.439 2.687-1.892 3.279-.484 8.13 1.357 10.793.9 1.302 1.973 2.766 3.379 2.713 1.354-.054 1.866-.879 3.502-.879 1.633 0 2.094.879 3.527.85 1.456-.026 2.379-1.327 3.27-2.633 1.03-1.512 1.456-2.973 1.483-3.05-.033-.013-2.847-1.097-2.875-4.319zM14.876 4.628C15.622 3.71 16.13 2.45 15.991 1.2c-1.071.045-2.387.728-3.157 1.638-.69.806-1.301 2.108-1.135 3.336 1.198.092 2.428-.611 3.177-1.546z"/>
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 0 1-.609-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1.01 1.01 0 0 1 0 1.73l-2.808 1.626L15.388 12l2.31-2.491zm-3.199-3.197L5.864 1.964l10.937 6.333-2.302 2.302z"/>
+        </svg>
+      )}
+      <div>
+        <div style={{ opacity: 0.7, fontSize: 10, letterSpacing: '0.04em' }}>{small}</div>
+        <strong>{big}</strong>
+      </div>
+    </a>
+  );
+}
+
+/* ===================== NAV / HERO / MARQUEE ===================== */
+function Nav({ lang, setLang }) {
+  const [open, setOpen] = React.useState(false);
+  const goTop = (e) => {
+    e.preventDefault();
+    setOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const closeMenu = () => setOpen(false);
+  React.useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+  React.useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+  const drawer = ReactDOM.createPortal(
+    <div className={`mobile-drawer ${open ? 'is-open' : ''}`} aria-hidden={!open}>
+      <div className="mobile-drawer__overlay" onClick={closeMenu}/>
+      <div className="mobile-drawer__panel" role="dialog" aria-modal="true">
+        <button
+          type="button"
+          className="mobile-drawer__close"
+          aria-label="Menüyü kapat"
+          onClick={closeMenu}
+        >
+          <span/><span/>
+        </button>
+        <nav className="mobile-drawer__links">
+          <a href="#features" onClick={closeMenu}>{lang === 'tr' ? 'Özellikler' : 'Features'}</a>
+          <a href="#discover" onClick={closeMenu}>{lang === 'tr' ? 'Keşif' : 'Discover'}</a>
+          <a href="#ai" onClick={closeMenu}>{lang === 'tr' ? 'AI Menü' : 'AI Menu'}</a>
+          <a href="#travel" onClick={closeMenu}>{lang === 'tr' ? 'Seyahat' : 'Travel'}</a>
+          <a href="#levels" onClick={closeMenu}>{lang === 'tr' ? 'Gurme' : 'Levels'}</a>
+          <a href="#business" onClick={closeMenu}>{lang === 'tr' ? 'İşletmeler' : 'Business'}</a>
+        </nav>
+        <div className="mobile-drawer__bottom">
+          <div className="lang-switch">
+            <button type="button" className={lang === 'tr' ? 'on' : ''} onClick={() => setLang('tr')} aria-pressed={lang === 'tr'}>TR</button>
+            <button type="button" className={lang === 'en' ? 'on' : ''} onClick={() => setLang('en')} aria-pressed={lang === 'en'}>EN</button>
+          </div>
+          <a href="#download" className="btn amber" onClick={closeMenu}>
+            {lang === 'tr' ? 'Uygulamayı indir' : 'Download app'}
+            <Icon.arrow/>
+          </a>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+  return (
+    <nav id="top" className={`nav ${open ? 'is-open' : ''}`}>
+      <div className="nav-inner">
+        <a href="#top" className="logo" aria-label="Lokantax ana sayfa" onClick={goTop}>
+          <div className="logo-mark"/>
+          <span className="logo-text">lokantax</span>
+        </a>
+        <div className="nav-links nav-links--desktop">
+          <a href="#features">{lang === 'tr' ? 'Özellikler' : 'Features'}</a>
+          <a href="#discover">{lang === 'tr' ? 'Keşif' : 'Discover'}</a>
+          <a href="#ai">{lang === 'tr' ? 'AI Menü' : 'AI Menu'}</a>
+          <a href="#travel">{lang === 'tr' ? 'Seyahat' : 'Travel'}</a>
+          <a href="#levels">{lang === 'tr' ? 'Gurme' : 'Levels'}</a>
+          <a href="#business">{lang === 'tr' ? 'İşletmeler' : 'Business'}</a>
+        </div>
+        <div className="lang-switch lang-switch--desktop">
+          <button type="button" className={lang === 'tr' ? 'on' : ''} onClick={() => setLang('tr')} aria-pressed={lang === 'tr'}>TR</button>
+          <button type="button" className={lang === 'en' ? 'on' : ''} onClick={() => setLang('en')} aria-pressed={lang === 'en'}>EN</button>
+        </div>
+        <Magnetic strength={0.45}>
+          <a href="#download" className="btn amber nav-cta">
+            {lang === 'tr' ? 'İndir' : 'Download'}
+            <Icon.arrow/>
+          </a>
+        </Magnetic>
+        <button
+          type="button"
+          className={`nav-burger ${open ? 'is-open' : ''}`}
+          aria-label={open ? 'Menüyü kapat' : 'Menüyü aç'}
+          aria-expanded={open}
+          onClick={() => setOpen(o => !o)}
+        >
+          <span/><span/><span/>
+        </button>
+      </div>
+      {drawer}
+    </nav>
+  );
+}
+
+function Hero({ lang }) {
+  const sceneRef = React.useRef(null);
+  useMouseParallax(sceneRef, { strength: 22 });
+  return (
+    <section className="hero">
+      <div className="mesh-bg" aria-hidden="true"/>
+      <span className="blob amber" data-speed="0.18" style={{ width: 520, height: 520, top: -120, right: -80 }}/>
+      <span className="blob coral b2" data-speed="0.10" style={{ width: 380, height: 380, bottom: -120, left: -100 }}/>
+      <div className="wrap">
+        <div className="hero-tag-row">
+          <span className="eyebrow"><span className="dot"/>{lang === 'tr' ? 'yemeğin sosyal rehberi' : 'your social food guide'}</span>
+          <span style={{ fontSize: 13, color: 'var(--ink-soft)' }}>
+            <Icon.star style={{ color: 'var(--amber-deep)', verticalAlign: '-3px' }}/> 4.9 · 12.400+ {lang === 'tr' ? 'kullanıcı' : 'users'}
+          </span>
+        </div>
+        <div className="hero-grid">
+          <div>
+            <h1 className="display">
+              {lang === 'tr' ? (<>Bugün<br/><span className="italic">nereye gitsek,</span><br/>ne <span className="amber">yesek?</span></>) : (<>Where to eat,<br/><span className="italic">who to meet,</span><br/>what to <span className="amber">cook?</span></>)}
+            </h1>
+            <div className="hero-copy">
+              <p className="lede">
+                {lang === 'tr'
+                  ? 'Restoran keşfinden grup buluşmasına, seyahat planından AI menü asistanına — yemekle ilgili her şey tek uygulamada.'
+                  : 'From restaurant discovery to group meetups, travel plans to AI menu assistant — everything about food in one app.'}
+                <span className="en">Restaurants. Meetups. Travel. Recipes. All in one.</span>
+              </p>
+              <div className="cta-row">
+                <Magnetic><StoreBtn store="apple" lang={lang}/></Magnetic>
+                <Magnetic><StoreBtn store="google" lang={lang}/></Magnetic>
+              </div>
+            </div>
+          </div>
+          <div className="hero-visual scene-3d" ref={sceneRef}>
+            <div className="phone-float p2" data-depth="1.4"><Phone src="assets/app-home.png" alt={lang === 'tr' ? 'Lokantax ana ekranı' : 'Lokantax home screen'} rotate={-6}/></div>
+            <div className="phone-float p1" data-depth="2.2"><Phone src="assets/app-restaurant.png" alt={lang === 'tr' ? 'Lokantax restoran ekranı' : 'Lokantax restaurant screen'} rotate={4}/></div>
+            <div className="annot" data-depth="3" style={{ top: 40, right: 20, animation: 'bounce 3s ease-in-out infinite' }}>
+              <span className="pin"/> {lang === 'tr' ? 'Google puanı 4.9' : 'Google 4.9'}
+            </div>
+            <div className="annot" data-depth="3.4" style={{ bottom: 180, left: -20, background: 'var(--ink)', color: 'var(--paper)', borderColor: 'var(--ink)' }}>
+              <Icon.users style={{ width: 14, height: 14 }}/> {lang === 'tr' ? '3 arkadaşın burada' : '3 friends here'}
+            </div>
+            <div className="annot" data-depth="3.2" style={{ top: 280, right: -10 }}>
+              <Icon.clock style={{ width: 14, height: 14, color: 'var(--amber-deep)' }}/> ~15 dk {lang === 'tr' ? 'bekleme' : 'wait'}
+            </div>
+          </div>
+        </div>
+        <div className="hero-stats">
+          <div className="stat"><div className="num"><Counter to={24} suffix=""/><span className="italic">k+</span></div><div className="label">{lang === 'tr' ? 'restoran ve mekan ağımızda' : 'restaurants in our network'}</div></div>
+          <div className="stat"><div className="num"><Counter to={50}/><span className="italic">+</span></div><div className="label">{lang === 'tr' ? 'dilde AI menü çevirisi' : 'languages in AI menu'}</div></div>
+          <div className="stat"><div className="num"><Counter to={81}/></div><div className="label">{lang === 'tr' ? 'şehirde Türkiye lezzet haritası' : 'cities on Turkey taste map'}</div></div>
+          <div className="stat"><div className="num">5<span className="italic">★</span></div><div className="label">{lang === 'tr' ? 'Gurme seviyesi ile oyunlaştırma' : 'gamified Gurme levels'}</div></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Marquee({ lang }) {
+  const items = lang === 'tr'
+    ? ['Restoran Keşfi', 'Grup Buluşması', 'Seyahat Planlayıcı', 'AI Menü Asistanı', 'Tarif Paylaşımı', 'Gurme Haritası', 'Arkadaşların Ne Yiyor', 'Hesap Bölüştürücü', 'Michelin Rehberi']
+    : ['Restaurant Discovery', 'Group Meetups', 'Travel Planner', 'AI Menu Assistant', 'Recipe Sharing', 'Taste Map', 'Friends Feed', 'Bill Splitter', 'Michelin Guide'];
+  const row = (<span>{items.map((it, i) => <React.Fragment key={i}><em style={{ fontStyle: 'italic' }}>{it}</em><span className="sep"/></React.Fragment>)}</span>);
+  return (<div className="marquee"><div className="marquee-track">{row}{row}</div></div>);
+}
+
+/* ===================== FEATURES / HOW IT WORKS ===================== */
+function Features({ lang }) {
+  const levelNames = lang === 'tr' ? ['Acemi','Keşifçi','Uzman','Usta','Efsane'] : ['Novice','Explorer','Expert','Master','Legend'];
+  return (
+    <section id="features" className="features">
+      <div className="wrap">
+        <div className="features-head">
+          <div>
+            <span className="kicker">{lang === 'tr' ? '— 01 / Tüm özellikler' : '— 01 / Everything'}</span>
+            <h2 className="section-title" style={{ marginTop: 20 }}>
+              {lang === 'tr' ? (<>Yemek tek başına<br/>bir şey değil. <span style={{ fontStyle: 'italic' }}>Etrafı</span><br/>da önemli.</>) : (<>Food is never<br/>just food. Everything<br/><span style={{ fontStyle: 'italic' }}>around</span> it matters too.</>)}
+            </h2>
+          </div>
+          <p>{lang === 'tr' ? "Lokantax bir restoran bulma uygulaması değil. Arkadaşınla buluşur, ülkeyi dolaşır, tarifi kaydeder, menüyü okuturur ve lezzet yolculuğunu seviye seviye ilerletirsin." : "Lokantax isn't just a restaurant finder. Meet with friends, travel the country, save a recipe, translate a menu and level up your taste journey."}</p>
+        </div>
+        <Reveal className="feature-grid" variant="rise" stagger>
+          <div className="f-card c-discover span-7" style={{ minHeight: 380 }}>
+            <div>
+              <span className="f-tag" style={{ background: 'rgba(245,197,24,0.2)', color: 'var(--amber)' }}><Icon.compass/>{lang === 'tr' ? 'Keşfet' : 'Discover'}</span>
+              <h3 style={{ color: 'var(--paper)', marginTop: 24 }}>{lang === 'tr' ? (<>Bursa'nın en iyi<br/>pidecisi? <span style={{ fontStyle: 'italic', color: 'var(--amber)' }}>Burada.</span></>) : (<>The best pide in Bursa?<br/><span style={{ fontStyle: 'italic', color: 'var(--amber)' }}>Right here.</span></>)}</h3>
+              <p style={{ color: 'rgba(247,245,239,0.7)' }}>{lang === 'tr' ? 'Google puanı, doluluk, gürültü seviyesi ve yaklaşık bekleme süresi — kararın için bilmen gereken her şey.' : 'Google rating, occupancy, noise level and estimated wait — everything you need to decide.'}</p>
+            </div>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 24 }}>
+              {['Google ★ 4.9', lang === 'tr' ? '%50 doluluk' : '50% full', lang === 'tr' ? '~15 dk bekleme' : '~15 min wait', lang === 'tr' ? 'Normal gürültü' : 'Normal noise', lang === 'tr' ? '197 yorum' : '197 reviews'].map((t, i) => (
+                <span key={i} style={{ padding: '6px 12px', borderRadius: 999, background: 'rgba(247,245,239,0.08)', border: '1px solid rgba(247,245,239,0.12)', fontSize: 12 }}>{t}</span>
+              ))}
+            </div>
+          </div>
+          <div className="f-card c-social span-5" style={{ minHeight: 380 }}>
+            <div>
+              <span className="f-tag"><Icon.users/>{lang === 'tr' ? 'Arkadaşlar' : 'Friends'}</span>
+              <h3 style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Arkadaşların<br/><span style={{ fontStyle: 'italic', color: 'var(--coral)' }}>ne yiyor?</span></>) : (<>What are your<br/><span style={{ fontStyle: 'italic', color: 'var(--coral)' }}>friends eating?</span></>)}</h3>
+              <p>{lang === 'tr' ? 'Canlı feed, favoriler, ortak listeler.' : 'Live feed, favorites, shared lists.'}</p>
+            </div>
+            <div style={{ display: 'flex', marginTop: 16 }}>
+              {['MB','AS','EK','YT'].map((a, i) => (
+                <div key={i} className="feed-ava" style={{ background: ['#FF6A4D','#F5C518','#2F7D5C','#5B4FE0'][i], marginLeft: i ? -10 : 0, width: 40, height: 40, fontSize: 14, border: '2px solid var(--coral-soft)' }}>{a}</div>
+              ))}
+              <span style={{ alignSelf: 'center', marginLeft: 12, fontSize: 13 }}>+142 {lang === 'tr' ? 'şu an aktif' : 'active now'}</span>
+            </div>
+          </div>
+          <div className="f-card c-meetup span-4">
+            <div>
+              <span className="f-tag"><Icon.gift/>{lang === 'tr' ? 'Buluşma' : 'Meetup'}</span>
+              <h3 style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Grup planları<br/><span style={{ fontStyle: 'italic' }}>tek yerde.</span></>) : (<>Group plans,<br/><span style={{ fontStyle: 'italic' }}>one place.</span></>)}</h3>
+              <p>{lang === 'tr' ? 'Davet, anket, hesap bölüştürücü.' : 'Invite, poll, split the bill.'}</p>
+            </div>
+            <div style={{ marginTop: 20, padding: 12, background: 'rgba(255,255,255,0.55)', borderRadius: 12, fontSize: 12, display: 'flex', justifyContent: 'space-between' }}>
+              <span>Haskövüm Pidecisi</span><span style={{ fontWeight: 600 }}>22:45</span>
+            </div>
+          </div>
+          <div className="f-card c-travel span-4">
+            <div>
+              <span className="f-tag"><Icon.plane/>{lang === 'tr' ? 'Seyahat' : 'Travel'}</span>
+              <h3 style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Uçak, otel,<br/><span style={{ fontStyle: 'italic' }}>lokanta.</span></>) : (<>Flight, hotel,<br/><span style={{ fontStyle: 'italic' }}>local eats.</span></>)}</h3>
+              <p>{lang === 'tr' ? 'Seyahatin hem lojistiği hem lezzeti.' : 'Logistics and taste, together.'}</p>
+            </div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 20 }}>
+              {['✈️','🏨','🚗','📶','🍝','⭐'].map((e, i) => (
+                <div key={i} style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.6)', display: 'grid', placeItems: 'center' }}>{e}</div>
+              ))}
+            </div>
+          </div>
+          <div className="f-card c-ai span-4">
+            <div>
+              <span className="f-tag"><Icon.sparkle/>AI</span>
+              <h3 style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Menü tercümesi<br/><span style={{ fontStyle: 'italic', color: 'var(--violet)' }}>50+ dil.</span></>) : (<>Menu translation<br/><span style={{ fontStyle: 'italic', color: 'var(--violet)' }}>50+ langs.</span></>)}</h3>
+              <p>{lang === 'tr' ? 'Alerjen, fiyat, içerik — fotoğrafla.' : 'Allergens, prices, contents — by photo.'}</p>
+            </div>
+            <div style={{ marginTop: 20, fontFamily: 'Newsreader, serif', fontSize: 14, color: 'var(--violet)', letterSpacing: '0.02em' }}>TR · EN · DE · FR · ES · IT · JP · AR · RU…</div>
+          </div>
+          <div className="f-card c-recipe span-6">
+            <div>
+              <span className="f-tag"><Icon.book/>{lang === 'tr' ? 'Tarifler' : 'Recipes'}</span>
+              <h3 style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Ev yemeğini <span style={{ fontStyle: 'italic' }}>sakla,</span><br/>paylaş, yeniden pişir.</>) : (<>Save, share, <span style={{ fontStyle: 'italic' }}>cook again.</span></>)}</h3>
+              <p>{lang === 'tr' ? 'AI yardımıyla fotoğraftan malzeme ve adım çıkarır.' : 'AI pulls ingredients and steps from a photo.'}</p>
+            </div>
+            <div style={{ display: 'flex', gap: 8, marginTop: 20, flexWrap: 'wrap' }}>
+              {['Mantı','Kuru Fasulye','İmam Bayıldı','Pilav'].map((r, i) => (
+                <span key={i} style={{ padding: '6px 12px', borderRadius: 999, background: 'rgba(14,18,32,0.08)', fontSize: 12 }}>{r}</span>
+              ))}
+            </div>
+          </div>
+          <div className="f-card c-levels span-6">
+            <div>
+              <span className="f-tag"><Icon.flame style={{ color: 'var(--sky)' }}/>{lang === 'tr' ? 'Gurme Seviyesi' : 'Gurme Level'}</span>
+              <h3 style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Lezzet yolculuğunda<br/><span style={{ fontStyle: 'italic', color: 'var(--sky)' }}>seviye atla.</span></>) : (<>Level up<br/><span style={{ fontStyle: 'italic', color: 'var(--sky)' }}>your palate.</span></>)}</h3>
+              <p>{lang === 'tr' ? 'Her fiş bir XP. 5 seviye, sınırsız yemek.' : 'Every receipt is XP. 5 levels, unlimited meals.'}</p>
+            </div>
+            <div style={{ marginTop: 20, display: 'flex', gap: 6 }}>
+              {levelNames.map((n, i) => (
+                <div key={i} style={{ flex: 1, padding: '10px 8px', borderRadius: 10, background: i < 2 ? 'var(--sky)' : 'rgba(255,255,255,0.55)', color: i < 2 ? 'white' : 'var(--ink)', textAlign: 'center', fontSize: 11, fontWeight: 600 }}>{n}</div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function HowItWorks({ lang }) {
+  const steps = lang === 'tr' ? [
+    { n: '01', t: 'Keşfet', d: 'Harita üzerinden restoran, tatlıcı, kafe bul. Doluluk ve gürültü seviyelerini gör.' },
+    { n: '02', t: 'Planla', d: 'Arkadaşlarını davet et, anket aç, tarih-saat kararlaştır, hesabı bölüştür.' },
+    { n: '03', t: 'Deneyimle', d: 'Gittiğin yerde menüyü fotoğrafla, yorumunu bırak, fişini yükle.' },
+    { n: '04', t: 'Seviye Atla', d: 'XP kazan, şehir koleksiyonunu tamamla, Gurme rütbenle övün.' }
+  ] : [
+    { n: '01', t: 'Discover', d: 'Find restaurants, cafes, dessert shops on the map. See occupancy and noise.' },
+    { n: '02', t: 'Plan', d: 'Invite friends, run polls, settle date-time, split the bill.' },
+    { n: '03', t: 'Experience', d: 'Snap the menu, leave a review, upload your receipt.' },
+    { n: '04', t: 'Level Up', d: 'Earn XP, complete the city collection, flaunt your Gurme rank.' }
+  ];
+  return (
+    <section className="how">
+      <div className="wrap">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: 40, flexWrap: 'wrap' }}>
+          <div>
+            <span className="kicker" style={{ color: 'rgba(247,245,239,0.5)' }}>— 02 / {lang === 'tr' ? 'Nasıl çalışır' : 'How it works'}</span>
+            <h2 className="section-title" style={{ marginTop: 20, maxWidth: '16ch' }}>{lang === 'tr' ? (<>Dört adım,<br/>sonsuz <span style={{ fontStyle: 'italic', color: 'var(--amber)' }}>lezzet.</span></>) : (<>Four steps,<br/>endless <span style={{ fontStyle: 'italic', color: 'var(--amber)' }}>taste.</span></>)}</h2>
+          </div>
+          <p style={{ color: 'rgba(247,245,239,0.6)', maxWidth: 320, fontSize: 15 }}>{lang === 'tr' ? 'Uygulama bir oyun gibi akar. Yemek yedikçe seviyen artar, haritan dolar.' : 'It flows like a game. The more you eat, the higher you climb and the fuller your map gets.'}</p>
+        </div>
+        <Reveal className="how-grid" variant="up" stagger>
+          {steps.map((s, i) => (
+            <div key={i} className="how-step"><div className="num">{s.n}</div><h4>{s.t}</h4><p>{s.d}</p></div>
+          ))}
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ===================== DISCOVERY / AI MENU ===================== */
+function Discovery({ lang }) {
+  const [active, setActive] = React.useState(0);
+  const items = lang === 'tr' ? [
+    { ico: <Icon.star/>, t: 'Google puanı ve yorumlar', d: 'Her mekanın gerçek Google puanı ve yorum sayısı ilk bakışta.' },
+    { ico: <Icon.users/>, t: 'Anlık doluluk', d: 'Mekan ne kadar dolu? Masaya oturmadan önce gör.' },
+    { ico: <Icon.clock/>, t: 'Tahmini bekleme süresi', d: 'Kullanıcı verisiyle güncel bekleme süresi.' },
+    { ico: <Icon.volume/>, t: 'Gürültü seviyesi', d: 'Sessiz mi, canlı mı — doğru ambiyansı seç.' },
+    { ico: <Icon.book/>, t: 'Menü ve yorumlar', d: 'Menüyü oku, yorumları gör, rezervasyonu başlat.' }
+  ] : [
+    { ico: <Icon.star/>, t: 'Google ratings & reviews', d: 'Real Google rating and review count at a glance.' },
+    { ico: <Icon.users/>, t: 'Live occupancy', d: 'How busy is it right now? Check before you sit.' },
+    { ico: <Icon.clock/>, t: 'Wait time estimate', d: 'Crowd-sourced, up-to-the-minute wait.' },
+    { ico: <Icon.volume/>, t: 'Noise level', d: 'Quiet or lively — pick the right vibe.' },
+    { ico: <Icon.book/>, t: 'Menu & reviews', d: 'Read the menu, check reviews, start a reservation.' }
+  ];
+  return (
+    <section id="discover" className="discover">
+      <div className="wrap">
+        <div className="discover-top">
+          <div>
+            <span className="kicker">— 03 / {lang === 'tr' ? 'Keşfet' : 'Discover'}</span>
+            <h2 className="section-title" style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Mekanı<br/><span style={{ fontStyle: 'italic' }}>içeri girmeden</span><br/>tanı.</>) : (<>Know the place<br/><span style={{ fontStyle: 'italic' }}>before you walk in.</span></>)}</h2>
+          </div>
+          <p style={{ fontSize: 18, color: 'var(--ink-soft)', maxWidth: 420 }}>{lang === 'tr' ? 'Sadece adres ve puan değil; o anki ambiyansı, doluluğu ve bekleme süresini de görürsün. Kararını kapıda değil, kanepede ver.' : "Not just address and rating — see the vibe, how full it is, and wait time. Decide from the sofa, not the door."}</p>
+        </div>
+        <div className="discover-body">
+          <Reveal className="feature-list" variant="up" stagger>
+            {items.map((f, i) => (
+              <button key={i} type="button" className={`feature-item ${i === active ? 'active' : ''}`} onClick={() => setActive(i)} aria-pressed={i === active}>
+                <div className="feature-ico">{f.ico}</div>
+                <div><h5>{f.t}</h5><p>{f.d}</p></div>
+              </button>
+            ))}
+          </Reveal>
+          <Tilt className="discover-visual" max={9}>
+            <Phone src="assets/app-restaurant.png" alt={lang === 'tr' ? 'Restoran detay ekranı' : 'Restaurant detail screen'} rotate={-2}/>
+            <div className="annot" style={{ top: 80, right: 20 }}><Icon.star style={{ width: 14, height: 14, color: 'var(--amber-deep)' }}/> 4.9 · 197 {lang === 'tr' ? 'yorum' : 'reviews'}</div>
+            <div className="annot" style={{ bottom: 260, left: 20, background: 'var(--ink)', color: 'var(--paper)', borderColor: 'var(--ink)' }}><Icon.users style={{ width: 14, height: 14 }}/> %50 {lang === 'tr' ? 'doluluk' : 'full'}</div>
+            <div className="annot" style={{ bottom: 160, right: -10 }}><Icon.clock style={{ width: 14, height: 14, color: 'var(--amber-deep)' }}/> ~15 dk</div>
+            <div className="annot" style={{ top: 230, left: -20 }}><Icon.volume style={{ width: 14, height: 14 }}/> {lang === 'tr' ? 'Normal gürültü' : 'Normal noise'}</div>
+          </Tilt>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AIMenu({ lang }) {
+  const langs = ['Türkçe','English','Deutsch','Français','Español','日本語','العربية','Русский','한국어','Italiano'];
+  const [activeLang, setActiveLang] = React.useState(1);
+  const dishes = [
+    { name: 'Adana Kebap', en: 'Spicy minced lamb skewer', price: '₺420', flags: [{ t: 'Gluten-free', cls: 'ok' }] },
+    { name: 'İçli Köfte', en: 'Stuffed bulgur dumpling', price: '₺180', flags: [{ t: 'Contains nuts', cls: 'danger' }] },
+    { name: 'Künefe', en: 'Cheese pastry with syrup', price: '₺220', flags: [{ t: 'Dairy', cls: 'ai-flag' }, { t: 'Gluten', cls: 'ai-flag' }] },
+  ];
+  return (
+    <section id="ai" className="ai-menu">
+      <span className="blob violet" data-speed="0.14" style={{ width: 460, height: 460, top: -100, left: -80 }}/>
+      <span className="blob violet b3" data-speed="0.08" style={{ width: 320, height: 320, bottom: -80, right: -60 }}/>
+      <div className="wrap">
+        <div className="ai-menu-grid">
+          <div>
+            <span className="kicker" style={{ color: 'var(--violet)' }}>— 04 / AI {lang === 'tr' ? 'Menü Asistanı' : 'Menu Assistant'}</span>
+            <h2 className="section-title" style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Menüyü<br/>fotoğrafla.<br/><span style={{ fontStyle: 'italic', color: 'var(--violet)' }}>Anında anla.</span></>) : (<>Snap the menu.<br/><span style={{ fontStyle: 'italic', color: 'var(--violet)' }}>Instantly understand.</span></>)}</h2>
+            <p style={{ fontSize: 18, color: 'var(--ink-soft)', maxWidth: 460, marginTop: 28 }}>{lang === 'tr' ? '50+ dilde anlık menü çevirisi. Alerjen uyarıları, fiyat analizleri, içerik detayları — yabancı bir şehirde bile kendi evindeymiş gibi sipariş ver.' : 'Instant menu translation in 50+ languages. Allergen warnings, price analysis, ingredient detail — order like a local in any foreign city.'}</p>
+            <div className="lang-chips">
+              {langs.map((l, i) => (
+                <button key={i} type="button" className={`lang-chip ${i === activeLang ? 'on' : ''}`} onClick={() => setActiveLang(i)} aria-pressed={i === activeLang}>{l}</button>
+              ))}
+              <span className="lang-chip" aria-hidden="true">+40</span>
+            </div>
+          </div>
+          <Reveal variant="tiltR">
+            <Tilt className="ai-demo" max={6} scale={1.01} data-scroll-tilt="">
+              <div className="ai-demo-header">
+                <div className="tag">AI {lang === 'tr' ? 'Tarıyor' : 'Scanning'}</div>
+                <div style={{ fontSize: 12, color: 'var(--ink-soft)' }}>{langs[activeLang]} · {lang === 'tr' ? 'anlık' : 'live'}</div>
+              </div>
+              <div className="ai-photo">
+                <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #3A2818, #6B4423)', display: 'grid', placeItems: 'center', color: 'rgba(255,255,255,0.4)', fontFamily: 'Newsreader, serif', fontSize: 14, letterSpacing: '0.1em' }}>MENÜ</div>
+                <div className="ai-scan"/>
+              </div>
+              <div className="ai-result">
+                {dishes.map((d, i) => (
+                  <div key={i} className="ai-dish">
+                    <div className="ai-dish-name">{d.name}<small>{d.en}</small></div>
+                    <div className="ai-dish-meta">
+                      <div className="price">{d.price}</div>
+                      <div className="flags">{d.flags.map((f, j) => (<span key={j} className={`ai-flag ${f.cls || ''}`}>{f.t}</span>))}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Tilt>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ===================== TRAVEL / SOCIAL / LEVELS ===================== */
+function Travel({ lang }) {
+  const tabs = lang === 'tr' ? [
+    { i: '✈️', t: 'Uçak' },{ i: '🏨', t: 'Otel' },{ i: '🚗', t: 'Araç' },{ i: '🍝', t: 'Lokanta' },
+    { i: '📶', t: 'eSIM' },{ i: '⭐', t: 'Michelin' },{ i: '🥘', t: 'Yerel Tatlar' },{ i: '🧭', t: 'Rota' }
+  ] : [
+    { i: '✈️', t: 'Flight' },{ i: '🏨', t: 'Hotel' },{ i: '🚗', t: 'Car' },{ i: '🍝', t: 'Restaurant' },
+    { i: '📶', t: 'eSIM' },{ i: '⭐', t: 'Michelin' },{ i: '🥘', t: 'Local' },{ i: '🧭', t: 'Route' }
+  ];
+  const [active, setActive] = React.useState(3);
+  return (
+    <section id="travel" className="travel">
+      <span className="blob amber b2" data-speed="0.12" style={{ width: 480, height: 480, top: -120, right: -120, opacity: 0.35 }}/>
+      <span className="blob coral b3" data-speed="0.18" style={{ width: 360, height: 360, bottom: -120, left: -80, opacity: 0.35 }}/>
+      <div className="wrap">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: 40, flexWrap: 'wrap' }}>
+          <div>
+            <span className="kicker" style={{ color: 'rgba(247,245,239,0.5)' }}>— 05 / {lang === 'tr' ? 'Seyahat' : 'Travel'}</span>
+            <h2 className="section-title" style={{ marginTop: 20, color: 'var(--paper)' }}>{lang === 'tr' ? (<>Şehir değişir,<br/><span style={{ fontStyle: 'italic', color: 'var(--amber)' }}>iştah aynı.</span></>) : (<>City changes,<br/><span style={{ fontStyle: 'italic', color: 'var(--amber)' }}>appetite doesn't.</span></>)}</h2>
+          </div>
+          <p style={{ color: 'rgba(247,245,239,0.75)', maxWidth: 420, fontSize: 17 }}>{lang === 'tr' ? "Uçak biletinden Michelin rehberine, yerel tatlardan eSIM'e — seyahatini lokantanla birlikte planla." : "From flights to Michelin guides, local dishes to eSIM — plan your trip alongside your plate."}</p>
+        </div>
+        <div className="travel-grid">
+          <div>
+            <div className="travel-tabs">
+              {tabs.map((t, i) => (
+                <button key={i} type="button" className={`travel-tab ${i === active ? 'on' : ''}`} onClick={() => setActive(i)} aria-pressed={i === active}>
+                  <span>{t.i}</span>{t.t}
+                </button>
+              ))}
+            </div>
+            <div style={{ marginTop: 48, padding: 28, background: 'rgba(255,255,255,0.08)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)' }}>
+              <div style={{ fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.6, marginBottom: 10 }}>{lang === 'tr' ? 'Şu an: Barselona' : 'Current: Barcelona'}</div>
+              <div style={{ fontFamily: 'Newsreader, serif', fontSize: 34, lineHeight: 1.05, letterSpacing: '-0.02em' }}>{tabs[active].t} — {lang === 'tr' ? '12 öneri hazır' : '12 picks ready'}</div>
+              <div style={{ display: 'flex', gap: 8, marginTop: 20, flexWrap: 'wrap' }}>
+                {(lang === 'tr' ? ['Paella (yerel)', '⭐ Disfrutar', 'Tapas turu', 'Mercat'] : ['Paella (local)', '⭐ Disfrutar', 'Tapas tour', 'Mercat']).map((t, i) => (
+                  <span key={i} style={{ padding: '8px 14px', background: 'var(--amber)', color: 'var(--ink)', borderRadius: 999, fontSize: 13, fontWeight: 500 }}>{t}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="travel-scene" style={{ position: 'relative' }}>
+            <Tilt style={{ position: 'absolute', top: 0, right: 0 }} max={10}>
+              <Phone src="assets/app-travel.png" alt={lang === 'tr' ? 'Seyahat planlama ekranı' : 'Travel planning screen'} rotate={3}/>
+            </Tilt>
+            <div style={{ position: 'absolute', bottom: 0, left: 0, padding: 18, background: 'var(--paper)', color: 'var(--ink)', borderRadius: 18, width: 220, boxShadow: '0 30px 60px -20px rgba(0,0,0,0.4)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, color: 'var(--sage)' }}><span style={{ fontSize: 14 }}>⭐</span> MICHELIN</div>
+              <div style={{ fontFamily: 'Newsreader, serif', fontSize: 22, lineHeight: 1.1, marginTop: 8, letterSpacing: '-0.01em' }}>Disfrutar</div>
+              <div style={{ fontSize: 12, color: 'var(--ink-soft)', marginTop: 4 }}>{lang === 'tr' ? '3 yıldız · Barselona' : '3 stars · Barcelona'}</div>
+            </div>
+            <div className="annot" style={{ top: 50, left: 20, color: 'var(--ink)' }}><Icon.plane style={{ width: 14, height: 14 }}/> IST → BCN</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Social({ lang }) {
+  const items = lang === 'tr' ? [
+    { ava: 'MB', color: '#FF6A4D', name: 'Mert B.', act: 'şu an burada:', place: '1944 Profiterol', time: '3 dk önce' },
+    { ava: 'AS', color: '#F5C518', name: 'Ayşe S.', act: 'favorilere ekledi:', place: 'Muhacirler Lokantası', time: '12 dk önce' },
+    { ava: 'EK', color: '#2F7D5C', name: 'Emre K.', act: 'yorum yazdı:', place: 'Köfteci Yusuf', time: '1 sa önce' },
+    { ava: 'YT', color: '#5B4FE0', name: 'Yaz T.', act: 'tarif paylaştı:', place: 'Ev Mantısı', time: '2 sa önce' },
+  ] : [
+    { ava: 'MB', color: '#FF6A4D', name: 'Mert B.', act: 'is here now:', place: '1944 Profiterol', time: '3 min ago' },
+    { ava: 'AS', color: '#F5C518', name: 'Ayşe S.', act: 'favorited:', place: 'Muhacirler Lokantası', time: '12 min ago' },
+    { ava: 'EK', color: '#2F7D5C', name: 'Emre K.', act: 'reviewed:', place: 'Köfteci Yusuf', time: '1 hr ago' },
+    { ava: 'YT', color: '#5B4FE0', name: 'Yaz T.', act: 'shared a recipe:', place: 'Homemade Mantı', time: '2 hr ago' },
+  ];
+  return (
+    <section id="social" className="social">
+      <div className="wrap">
+        <div className="social-grid">
+          <div className="feed-stack">
+            <div style={{ fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600, padding: '4px 8px', color: 'var(--coral)' }}>{lang === 'tr' ? 'Canlı akış' : 'Live feed'} · {lang === 'tr' ? '142 aktif' : '142 active'}</div>
+            {items.map((f, i) => (
+              <div key={i} className="feed-card" style={{ animation: `slideIn 0.6s ${i * 0.1}s both` }}>
+                <div className="feed-ava" style={{ background: f.color }}>{f.ava}</div>
+                <div className="meta">
+                  <div><span className="name">{f.name}</span> <span className="act">{f.act}</span></div>
+                  <div className="place">{f.place}</div>
+                </div>
+                <div className="time">{f.time}</div>
+              </div>
+            ))}
+          </div>
+          <div>
+            <span className="kicker">— 06 / {lang === 'tr' ? 'Arkadaşlar' : 'Friends'}</span>
+            <h2 className="section-title" style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Yemek <span style={{ fontStyle: 'italic' }}>yalnız</span><br/>yenmez.</>) : (<>Food is <span style={{ fontStyle: 'italic' }}>better</span><br/>with friends.</>)}</h2>
+            <p style={{ fontSize: 18, color: 'var(--ink-soft)', maxWidth: 440, marginTop: 28 }}>{lang === 'tr' ? 'Arkadaşlarının o an nerede yediğini, neyi favorilediğini, ne tarif paylaştığını gör. Onlardan davet al, kendi planını paylaş.' : 'See where your friends are eating, what they favorite, what recipes they share. Get invited, share your plan.'}</p>
+            <div style={{ marginTop: 32, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+              <div style={{ padding: '14px 20px', borderRadius: 16, background: 'var(--coral-soft)', border: '1px solid var(--line)' }}>
+                <div style={{ fontSize: 28, fontFamily: 'Newsreader, serif' }}>1.2M+</div>
+                <div style={{ fontSize: 12, color: 'var(--ink-soft)' }}>{lang === 'tr' ? 'aylık aktivite' : 'monthly activities'}</div>
+              </div>
+              <div style={{ padding: '14px 20px', borderRadius: 16, background: 'var(--amber-soft)', border: '1px solid var(--line)' }}>
+                <div style={{ fontSize: 28, fontFamily: 'Newsreader, serif' }}>68%</div>
+                <div style={{ fontSize: 12, color: 'var(--ink-soft)' }}>{lang === 'tr' ? 'arkadaş önerisiyle rezervasyon' : 'bookings via friend picks'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Levels({ lang }) {
+  const [progress, setProgress] = React.useState(0);
+  React.useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) { setProgress(38); return; }
+    const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) setProgress(38); }); }, { threshold: 0.3 });
+    const el = document.getElementById('xp-bar-el');
+    if (el) obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  const ladder = lang === 'tr' ? [
+    { n: 'Acemi Gurme', xp: '0 — 100 XP', state: 'done', color: '#2F7D5C' },
+    { n: 'Keşifçi Gurme', xp: '100 — 300 XP', state: 'curr', color: '#3B7DFF' },
+    { n: 'Uzman Gurme', xp: '300 — 600 XP', state: 'locked', color: '#9B9B9B' },
+    { n: 'Usta Gurme', xp: '600 — 1000 XP', state: 'locked', color: '#9B9B9B' },
+    { n: 'Efsane Gurme', xp: '1000 — 9999 XP', state: 'locked', color: '#9B9B9B' },
+  ] : [
+    { n: 'Novice Gurme', xp: '0 — 100 XP', state: 'done', color: '#2F7D5C' },
+    { n: 'Explorer Gurme', xp: '100 — 300 XP', state: 'curr', color: '#3B7DFF' },
+    { n: 'Expert Gurme', xp: '300 — 600 XP', state: 'locked', color: '#9B9B9B' },
+    { n: 'Master Gurme', xp: '600 — 1000 XP', state: 'locked', color: '#9B9B9B' },
+    { n: 'Legend Gurme', xp: '1000 — 9999 XP', state: 'locked', color: '#9B9B9B' },
+  ];
+  return (
+    <section id="levels" className="levels">
+      <span className="blob sky" data-speed="0.12" style={{ width: 460, height: 460, top: -120, right: -80 }}/>
+      <div className="wrap">
+        <div className="levels-grid">
+          <div>
+            <span className="kicker" style={{ color: 'var(--sky)' }}>— 07 / {lang === 'tr' ? 'Gurme Seviyesi' : 'Gurme Levels'}</span>
+            <h2 className="section-title" style={{ marginTop: 20 }}>{lang === 'tr' ? (<>Her lokma<br/>bir <span style={{ fontStyle: 'italic', color: 'var(--sky)' }}>XP.</span></>) : (<>Every bite<br/>is <span style={{ fontStyle: 'italic', color: 'var(--sky)' }}>XP.</span></>)}</h2>
+            <p style={{ fontSize: 18, color: 'var(--ink-soft)', maxWidth: 460, marginTop: 28 }}>{lang === 'tr' ? 'Gidilen mekan, yüklenen fiş, yazılan yorum — hepsi bir hikaye. Lezzet haritanı doldur, beş seviye boyunca Gurme rütbeni yükselt.' : "Places you've gone, receipts you've uploaded, reviews you've written — all part of the story. Fill your taste map, climb all five ranks."}</p>
+            <div className="stats-3">
+              <div className="stat-box"><div className="bnum">13</div><div className="blab">{lang === 'tr' ? 'Toplam Fiş' : 'Receipts'}</div></div>
+              <div className="stat-box"><div className="bnum">1</div><div className="blab">{lang === 'tr' ? 'Şehir' : 'City'}</div></div>
+              <div className="stat-box"><div className="bnum">3</div><div className="blab">{lang === 'tr' ? 'Mekan' : 'Places'}</div></div>
+            </div>
+          </div>
+          <div>
+            <div className="xp-card" id="xp-bar-el" data-scroll-tilt="">
+              <div className="xp-rank">
+                <div className="xp-rank-badge"><Icon.compass/></div>
+                <div>
+                  <h4>{lang === 'tr' ? 'Keşifçi Gurme' : 'Explorer Gurme'}</h4>
+                  <div className="sub">{lang === 'tr' ? '13 onaylı fiş · 1 şehir' : '13 receipts · 1 city'}</div>
+                </div>
+                <div style={{ marginLeft: 'auto', fontFamily: 'Newsreader, serif', fontSize: 32, color: 'var(--sky)' }}>{progress}%</div>
+              </div>
+              <div className="xp-bar"><div className="xp-bar-fill" style={{ width: progress + '%' }}/></div>
+              <div className="xp-row"><span>75 / 200 XP</span><span>{lang === 'tr' ? 'Sıradaki: Uzman Gurme' : 'Next: Expert Gurme'}</span></div>
+              <div className="level-ladder">
+                {ladder.map((l, i) => (
+                  <div key={i} className={`level-row ${l.state}`}>
+                    <div className="level-ico" style={{ background: l.color }}>
+                      {l.state === 'done' ? <Icon.check/> : l.state === 'curr' ? <Icon.compass style={{ width: 14, height: 14 }}/> : <Icon.lock/>}
+                    </div>
+                    <h5>{l.n}</h5>
+                    <small>{l.xp}</small>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ===================== BUSINESS / DOWNLOAD / FOOTER ===================== */
+function Business({ lang }) {
+  const steps = lang === 'tr' ? [
+    {
+      n: '01',
+      t: 'Hesap oluştur',
+      d: 'İşletme türünü seç (tek şube veya zincir), ad-soyad ve e-posta ile 1 dakikada hesabını aç.',
+      bullets: ['🏪 Tek şube veya 🔗 zincir', 'E-posta + güvenli şifre', 'Anında giriş'],
+    },
+    {
+      n: '02',
+      t: 'Mekanını eşle',
+      d: 'Üç farklı yoldan biriyle mekanını tanımla. Harita üzerinde mavi pin = Lokantax\'ta var, yeşil pin = Google\'da bulundu.',
+      bullets: ['🏷️ Mevcut profili sahiplen', '🗺️ Google Maps\'ten ekle', '✍️ Manuel giriş'],
+    },
+    {
+      n: '03',
+      t: 'Bilgi & belge yükle',
+      d: 'Yasal bilgileri doldur, belgeleri panele yükle. Tüm dosyalar şifreli olarak güvenle saklanır.',
+      bullets: ['Vergi no · IBAN · adres', 'Vergi levhası, kimlik, mekan fotoğrafı', 'Zincirler için imza sirküleri'],
+    },
+    {
+      n: '04',
+      t: 'Onay & yayında',
+      d: 'Ekibimiz başvurunu inceler. Onay sonrası işletme paneli açılır, profilin keşfe çıkar.',
+      bullets: ['Ortalama 24 saat onay', '📬 E-posta + panel bildirimi', 'Anında menü, rezervasyon, kampanya'],
+    },
+  ] : [
+    {
+      n: '01',
+      t: 'Create account',
+      d: 'Choose business type (single venue or chain), sign up with name and email in under a minute.',
+      bullets: ['🏪 Single or 🔗 multi-venue', 'Email + secure password', 'Instant access'],
+    },
+    {
+      n: '02',
+      t: 'Match your venue',
+      d: 'Identify your venue in three ways. On the map, blue pin = on Lokantax, green pin = found on Google.',
+      bullets: ['🏷️ Claim existing profile', '🗺️ Add from Google Maps', '✍️ Manual entry'],
+    },
+    {
+      n: '03',
+      t: 'Add details & docs',
+      d: 'Fill legal info and upload documents to the panel. All files are encrypted and securely stored.',
+      bullets: ['Tax ID · IBAN · address', 'Tax certificate, ID, venue photo', 'Signature circular for chains'],
+    },
+    {
+      n: '04',
+      t: 'Approval & live',
+      d: 'Our team reviews your application. Once approved, the dashboard opens and your profile goes public.',
+      bullets: ['~24 hour approval', '📬 Email + panel notifications', 'Instant menu, reservations, campaigns'],
+    },
+  ];
+  const benefits = lang === 'tr' ? [
+    { ico: '⚡', t: 'Hızlı başvuru', d: '~5 dakikada tamamla' },
+    { ico: '🗺️', t: 'Kolay eşleştirme', d: 'Google Maps + harita ile tek tıkla bul' },
+    { ico: '🔒', t: 'KVKK uyumlu', d: 'Şifreli altyapı, güvenli belge saklama' },
+    { ico: '📨', t: 'Şeffaf süreç', d: 'Her aşamada e-posta + panel bildirimi' },
+    { ico: '🏪', t: 'Tek veya zincir', d: 'İki model de tam destekli' },
+    { ico: '💯', t: 'Mükerrer koruma', d: 'Aynı mekan iki kere sahiplenilemez' },
+  ] : [
+    { ico: '⚡', t: 'Fast signup', d: 'Done in ~5 minutes' },
+    { ico: '🗺️', t: 'Easy matching', d: 'Find via Google Maps in one tap' },
+    { ico: '🔒', t: 'GDPR-ready', d: 'Encrypted, secure document storage' },
+    { ico: '📨', t: 'Transparent', d: 'Email + dashboard alerts at every step' },
+    { ico: '🏪', t: 'Single or chain', d: 'Both models fully supported' },
+    { ico: '💯', t: 'Anti-duplicate', d: 'Same venue can\'t be claimed twice' },
+  ];
+  return (
+    <section id="business" className="biz">
+      <div className="wrap">
+        <div className="biz-grid">
+          <div>
+            <span className="kicker">— 08 / {lang === 'tr' ? 'İşletmeler için' : 'For business'}</span>
+            <h2 style={{ marginTop: 20 }} className="section-title">{lang === 'tr' ? (<>Mekanını<br/><span style={{ fontStyle: 'italic' }}>doğru kişilere</span><br/>göster.</>) : (<>Put your place<br/>in front of the<br/><span style={{ fontStyle: 'italic' }}>right people.</span></>)}</h2>
+            <p className="biz-sub">{lang === 'tr' ? 'Lokantax kullanıcıları şehirlerinde aktif keşfeden lezzet tutkunları. Mekanını listele, menünü yükle, etkinliklerini yayına al.' : 'Lokantax users are taste-hunters actively exploring their cities. List your venue, upload your menu, announce your events.'}</p>
+            <div className="biz-stats">
+              <div className="stat"><div className="num"><Counter to={12.4} decimals={1}/><span className="italic">k</span></div><div className="label" style={{ color: 'var(--gold-deep)' }}>{lang === 'tr' ? 'aylık aktif kullanıcı' : 'monthly active users'}</div></div>
+              <div className="stat"><div className="num"><Counter to={68}/><span className="italic">%</span></div><div className="label" style={{ color: 'var(--gold-deep)' }}>{lang === 'tr' ? 'uygulamadan rezervasyon dönüşümü' : 'reservations via app'}</div></div>
+              <div className="stat"><div className="num"><Counter to={3.2} decimals={1}/><span className="italic">×</span></div><div className="label" style={{ color: 'var(--gold-deep)' }}>{lang === 'tr' ? 'liste edilen mekan ziyaret artışı' : 'listed venue visit uplift'}</div></div>
+            </div>
+          </div>
+          <div className="biz-cta-card">
+            <h4>{lang === 'tr' ? 'İşletme Paneli' : 'Business Dashboard'}</h4>
+            <p>{lang === 'tr' ? 'Menü, etkinlik, özel gün kampanyaları, yorum yönetimi — hepsi tek yerden.' : 'Menu, events, special-day campaigns, review management — all in one place.'}</p>
+            <ul>
+              <li>{lang === 'tr' ? 'Menü ve fotoğraf yönetimi' : 'Menu & photo management'}</li>
+              <li>{lang === 'tr' ? 'Rezervasyon ve etkinlik yönetimi' : 'Reservation & event management'}</li>
+              <li>{lang === 'tr' ? 'Düğün · doğum günü · özel gün kampanyaları' : 'Wedding · birthday · special campaigns'}</li>
+              <li>{lang === 'tr' ? 'AI destekli pazarlama içerikleri' : 'AI-powered marketing content'}</li>
+              <li>{lang === 'tr' ? 'Yorum yönetimi & gerçek zamanlı analitik' : 'Review tools & real-time analytics'}</li>
+              <li>{lang === 'tr' ? 'Zincirler için: tek panelden tüm şubeler' : 'For chains: all branches in one panel'}</li>
+              <li>{lang === 'tr' ? 'Otomatik AI menü çevirisi (50+ dil)' : 'Auto AI menu translation (50+ langs)'}</li>
+            </ul>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <a href="https://admin.lokantax.com/register" target="_blank" rel="noopener noreferrer" className="btn amber">{lang === 'tr' ? 'Hemen kaydol' : 'Register now'} <Icon.arrow/></a>
+              <a href="mailto:hello@lokantax.com" className="btn ghost" style={{ color: 'var(--paper)', borderColor: 'rgba(247,245,239,0.2)' }}>{lang === 'tr' ? 'Demo al' : 'Get a demo'}</a>
+            </div>
+            <p className="biz-cta-note">
+              <Icon.shield style={{ width: 14, height: 14, verticalAlign: '-2px', marginRight: 6 }}/>
+              {lang === 'tr' ? 'Kayıt ücretsiz · Sözleşme yok · İstediğin an iptal' : 'Free signup · No contract · Cancel anytime'}
+            </p>
+          </div>
+        </div>
+
+        <Reveal variant="up" stagger={0.08}>
+          <div className="biz-onboarding">
+            <div className="biz-onboarding__head">
+              <span className="kicker" style={{ color: 'var(--gold)' }}>— {lang === 'tr' ? 'Kayıt süreci' : 'Registration flow'}</span>
+              <h3 className="biz-onboarding__title">
+                {lang === 'tr' ? (<>4 adımda <span style={{ fontStyle: 'italic' }}>yayında.</span></>) : (<>Live in <span style={{ fontStyle: 'italic' }}>4 steps.</span></>)}
+              </h3>
+              <p className="biz-onboarding__sub">
+                {lang === 'tr'
+                  ? 'Başvurudan onaya tamamen dijital. Ortalama 24 saat içinde paneline erişiyorsun. Evrak için ofise gelmen gerekmez.'
+                  : 'Fully digital from signup to approval. Average 24-hour panel access. No office visits required.'}
+              </p>
+            </div>
+            <div className="biz-steps">
+              {steps.map((s) => (
+                <div key={s.n} className="biz-step">
+                  <span className="biz-step__num">{s.n}</span>
+                  <h4 className="biz-step__t">{s.t}</h4>
+                  <p className="biz-step__d">{s.d}</p>
+                  {s.bullets && (
+                    <ul className="biz-step__list">
+                      {s.bullets.map((b, i) => (<li key={i}>{b}</li>))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="biz-benefits">
+              {benefits.map((b, i) => (
+                <div key={i} className="biz-benefit">
+                  <span className="biz-benefit__ico" aria-hidden="true">{b.ico}</span>
+                  <div>
+                    <div className="biz-benefit__t">{b.t}</div>
+                    <div className="biz-benefit__d">{b.d}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="biz-onboarding__cta">
+              <a href="https://admin.lokantax.com/register" target="_blank" rel="noopener noreferrer" className="btn amber biz-onboarding__btn">
+                {lang === 'tr' ? 'Mekanını şimdi kaydet' : 'Register your venue now'}
+                <Icon.arrow/>
+              </a>
+              <a href="https://admin.lokantax.com/register" target="_blank" rel="noopener noreferrer" className="biz-onboarding__link">
+                admin.lokantax.com/register →
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Download({ lang }) {
+  return (
+    <section id="download" className="download">
+      <span className="blob amber" data-speed="0.12" style={{ width: 600, height: 600, top: '20%', left: '50%', marginLeft: -300 }}/>
+      <div className="wrap">
+        <span className="kicker">— 09 / {lang === 'tr' ? 'İndir' : 'Download'}</span>
+        <h2 className="section-title" style={{ fontSize: 'clamp(64px, 10vw, 180px)', margin: '20px auto 0', maxWidth: '14ch' }}>{lang === 'tr' ? (<>Bugün <span style={{ fontStyle: 'italic' }}>nereye</span> gitsek,<br/>ne <span style={{ background: 'var(--amber)', padding: '0 0.1em', borderRadius: 6 }}>yesek?</span></>) : (<>Your <span style={{ fontStyle: 'italic' }}>taste</span><br/>begins <span style={{ background: 'var(--amber)', padding: '0 0.1em', borderRadius: 6 }}>here.</span></>)}</h2>
+        <div className="stars">
+          {[0,1,2,3,4].map(i => (<Icon.star key={i} style={{ color: 'var(--amber-deep)', width: 18, height: 18 }}/>))}
+          <span style={{ marginLeft: 8, color: 'var(--ink-soft)' }}>4.9 · {lang === 'tr' ? '3.400+ değerlendirme' : '3,400+ reviews'}</span>
+        </div>
+        <div className="d-ctas">
+          <Magnetic strength={0.5}><StoreBtn store="apple" lang={lang}/></Magnetic>
+          <Magnetic strength={0.5}><StoreBtn store="google" lang={lang}/></Magnetic>
+        </div>
+        <div style={{ marginTop: 60, display: 'flex', justifyContent: 'center', gap: 40, opacity: 0.5, fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', flexWrap: 'wrap' }}>
+          <span>iOS 14+</span><span>Android 8+</span><span>{lang === 'tr' ? 'Ücretsiz' : 'Free'}</span><span>{lang === 'tr' ? 'Reklamsız' : 'Ad-free'}</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer({ lang }) {
+  const t = lang === 'tr';
+  return (
+    <footer id="footer">
+      <div className="wrap">
+        <div className="footer-grid">
+          <div>
+            <a href="#top" className="logo" style={{ color: 'var(--paper)' }} aria-label="Lokantax ana sayfa" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+              <div className="logo-mark logo-mark--lg"/>
+              <span className="logo-text logo-text--lg">lokantax</span>
+            </a>
+            <p style={{ marginTop: 16, fontSize: 14, color: 'rgba(247,245,239,0.6)', maxWidth: 320, lineHeight: 1.6 }}>{t ? 'Yemekle ilgili her şey tek uygulamada. Keşif, buluşma, seyahat, tarif — ve tabii ki lezzet.' : 'Everything food, in one app. Discover, meet, travel, cook — and of course, taste.'}</p>
+            <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
+              <StoreBtn store="apple" lang={lang}/>
+              <StoreBtn store="google" lang={lang}/>
+            </div>
+          </div>
+          <div>
+            <h5>{t ? 'Ürün' : 'Product'}</h5>
+            <a href="#discover">{t ? 'Keşfet' : 'Discover'}</a>
+            <a href="#social">{t ? 'Grup Buluşmaları' : 'Group Meetups'}</a>
+            <a href="#ai">AI Menu</a>
+            <a href="#travel">{t ? 'Seyahat' : 'Travel'}</a>
+            <a href="#features">{t ? 'Tarifler' : 'Recipes'}</a>
+            <a href="#levels">{t ? 'Gurme Seviyeleri' : 'Gurme Levels'}</a>
+          </div>
+          <div>
+            <h5>{t ? 'Şirket' : 'Company'}</h5>
+            <a href="#business">{t ? 'İşletmeler' : 'For Business'}</a>
+            <a href="mailto:hello@lokantax.com">{t ? 'İletişim' : 'Contact'}</a>
+          </div>
+          <div>
+            <h5>{t ? 'Yasal' : 'Legal'}</h5>
+            <a href="mailto:hello@lokantax.com">KVKK</a>
+            <a href="mailto:hello@lokantax.com">{t ? 'Gizlilik' : 'Privacy'}</a>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <div>© 2026 Lokantax · {t ? 'Tüm hakları saklıdır.' : 'All rights reserved.'}</div>
+          <div style={{ display: 'flex', gap: 24 }}>
+            <span>Instagram</span><span>Twitter</span><span>TikTok</span><span>LinkedIn</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ===================== APP ===================== */
+function App() {
+  const [lang, setLang] = React.useState('tr');
+  useGlobalCinematics();
+  return (
+    <>
+      <div className="grain" aria-hidden="true"/>
+      <div className="scroll-beam" aria-hidden="true" style={{ transform: 'scaleX(var(--p,0))' }}/>
+      <div className="cursor-spot" aria-hidden="true"/>
+      <Nav lang={lang} setLang={setLang}/>
+      <Hero lang={lang}/>
+      <Marquee lang={lang}/>
+      <Reveal variant="fade" as="div"><Features lang={lang}/></Reveal>
+      <Reveal variant="flip" as="div"><HowItWorks lang={lang}/></Reveal>
+      <Reveal variant="fade" as="div"><Discovery lang={lang}/></Reveal>
+      <Reveal variant="fade" as="div"><AIMenu lang={lang}/></Reveal>
+      <Reveal variant="flip" as="div"><Travel lang={lang}/></Reveal>
+      <Reveal variant="fade" as="div"><Social lang={lang}/></Reveal>
+      <Reveal variant="rise" as="div"><Levels lang={lang}/></Reveal>
+      <Reveal variant="fade" as="div"><Business lang={lang}/></Reveal>
+      <Reveal variant="zoom" as="div"><Download lang={lang}/></Reveal>
+      <Footer lang={lang}/>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
