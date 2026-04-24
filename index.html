@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20260418-29"/>
+  <link rel="stylesheet" href="styles.css?v=20260424-30"/>
 <style>
   @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
   @keyframes slideIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
@@ -986,6 +986,78 @@ function Discovery({ lang }) {
   );
 }
 
+function DigitalMenu({ lang }) {
+  const points = lang === 'tr'
+    ? [
+      'QR okutma ile anında açılış',
+      'Dil seçimi ve para birimi desteği',
+      'Fotoğraflı, kategorili, hızlı menü',
+      'Anlık güncelleme: ürün/tutar/stok',
+      'Kampanya ve özel etiketler',
+      'Panelden tek ekranda yönetim',
+    ]
+    : [
+      'Instant open with QR scan',
+      'Language and currency support',
+      'Photo-rich, categorized fast menu',
+      'Live updates: item/price/stock',
+      'Campaigns and special labels',
+      'Managed from one dashboard',
+    ];
+
+  return (
+    <section id="digital-menu" className="digital-menu">
+      <div className="wrap">
+        <div className="digital-menu-grid">
+          <div className="digital-menu-copy">
+            <span className="kicker">— 03B / {lang === 'tr' ? 'Dijital Menü' : 'Digital Menu'}</span>
+            <h2 className="section-title" style={{ marginTop: 20 }}>
+              {lang === 'tr'
+                ? <>QR ile açılan<br/><span style={{ fontStyle: 'italic', color: 'var(--amber)' }}>modern menü</span><br/>deneyimi.</>
+                : <>A QR-first<br/><span style={{ fontStyle: 'italic', color: 'var(--amber)' }}>modern menu</span><br/>experience.</>}
+            </h2>
+            <p className="digital-menu-sub">
+              {lang === 'tr'
+                ? 'Qlub tarzı, hızlı ve premium bir dijital menü alanı: misafirleriniz tek taramayla menüye ulaşır, siz içerikleri panelden anlık güncellersiniz.'
+                : 'A Qlub-style, fast and premium digital menu zone: guests access the menu in one scan while your team updates content instantly from the panel.'}
+            </p>
+            <div className="digital-menu-points">
+              {points.map((p, i) => (
+                <div key={i} className="digital-menu-point">{p}</div>
+              ))}
+            </div>
+            <div className="digital-menu-cta">
+              <a href="https://admin.lokantax.com/register" target="_blank" rel="noopener noreferrer" className="btn amber">
+                {lang === 'tr' ? 'Dijital menünü başlat' : 'Launch your digital menu'} <Icon.arrow/>
+              </a>
+              <a href="mailto:hello@lokantax.com" className="btn ghost">
+                {lang === 'tr' ? 'Örnek menü iste' : 'Request sample menu'}
+              </a>
+            </div>
+          </div>
+
+          <div className="digital-menu-visual" aria-hidden="true">
+            <div className="qr-card">
+              <div className="qr-grid"/>
+              <div className="qr-dot"/>
+              <div className="qr-label">{lang === 'tr' ? 'Menüyü aç' : 'Open menu'}</div>
+            </div>
+            <div className="digital-menu-phone-wrap">
+              <Phone src="assets/app-restaurant.png" alt={lang === 'tr' ? 'Dijital menü önizleme' : 'Digital menu preview'} rotate={-3}/>
+              <div className="annot" style={{ top: 48, right: -12 }}>
+                <Icon.star style={{ width: 14, height: 14, color: 'var(--amber-deep)' }}/> {lang === 'tr' ? 'Öne çıkanlar' : 'Featured picks'}
+              </div>
+              <div className="annot" style={{ bottom: 140, left: -16, background: 'var(--ink)', color: 'var(--paper)', borderColor: 'var(--ink)' }}>
+                <Icon.book style={{ width: 14, height: 14 }}/> {lang === 'tr' ? '3 dil aktif' : '3 languages on'}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function AIMenu({ lang }) {
   const langs = ['Türkçe','English','Deutsch','Français','Español','日本語','العربية','Русский','한국어','Italiano'];
   const [activeLang, setActiveLang] = React.useState(1);
@@ -1420,6 +1492,7 @@ function Footer({ lang }) {
           <div>
             <h5>{t ? 'Ürün' : 'Product'}</h5>
             <a href="#discover">{t ? 'Keşfet' : 'Discover'}</a>
+            <a href="#digital-menu">{t ? 'Dijital Menü' : 'Digital Menu'}</a>
             <a href="#social">{t ? 'Grup Buluşmaları' : 'Group Meetups'}</a>
             <a href="#ai">AI Menu</a>
             <a href="#travel">{t ? 'Seyahat' : 'Travel'}</a>
@@ -1463,6 +1536,7 @@ function App() {
       <Reveal variant="fade" as="div"><Features lang={lang}/></Reveal>
       <Reveal variant="flip" as="div"><HowItWorks lang={lang}/></Reveal>
       <Reveal variant="fade" as="div"><Discovery lang={lang}/></Reveal>
+      <Reveal variant="fade" as="div"><DigitalMenu lang={lang}/></Reveal>
       <Reveal variant="fade" as="div"><AIMenu lang={lang}/></Reveal>
       <Reveal variant="flip" as="div"><Travel lang={lang}/></Reveal>
       <Reveal variant="fade" as="div"><Social lang={lang}/></Reveal>
