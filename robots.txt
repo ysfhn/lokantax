@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /uploads/
+Disallow: /scraps/
+
+Sitemap: https://lokantax.com/sitemap.xml
